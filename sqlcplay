@@ -1,0 +1,23 @@
+SELECT p.category, SUM(s.amount) AS total_sales
+FROM sales_fact s
+JOIN products_dim p ON s.product_id = p.product_id
+GROUP BY p.category
+ORDER BY total_sales DESC;
+
+SELECT c.region, COUNT(s.sale_id) AS number_of_sales
+FROM sales_fact s
+JOIN customers_dim c ON s.customer_id = c.customer_id
+GROUP BY c.region
+ORDER BY number_of_sales DESC;
+
+SELECT t.year, t.month, AVG(s.amount) AS average_ticket
+FROM sales_fact s
+JOIN time_dim t ON s.sale_date = t.date
+GROUP BY t.year, t.month
+ORDER BY t.year, t.month;
+
+CREATE INDEX idx_sales_fact_product ON sales_fact(product_id);
+CREATE INDEX idx_sales_fact_customer ON sales_fact(customer_id);
+CREATE INDEX idx_sales_fact_date ON sales_fact(sale_date);
+CREATE INDEX idx_products_dim_category ON products_dim(category);
+CREATE INDEX idx_customers_dim_region ON customers_dim(region);
